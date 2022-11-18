@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import sanityClient from '../client';
 
 export default function AllPosts() {
-  const [allPostsData, setAllPosts] = useState([]);
+  const [allPostsData, setAllPosts] = useState('');
 
   useEffect(() => {
     sanityClient
@@ -15,12 +15,15 @@ export default function AllPosts() {
                asset->{
                 _id,
                 url
-               } 
+               }  
             }
         }`
       )
-      .then((data) => setAllPosts(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        setAllPosts(data);
+        console.log(data);
+      })
+      .catch(console.error);
   }, []);
 
   return (
@@ -28,14 +31,16 @@ export default function AllPosts() {
       <h2>Binq Posts</h2>
       <h3>Welcome to my Binq posts page!</h3>
       <div>
-        {allPostsData &&
-          allPostsData.map((post, index) => (
-            <Link to={`/`}>
-              <span key={index}>
-                <img src={post.mainImage.asset.url} alt="" />
+        {allPostsData[0] && (
+          <Link to={`/${allPostsData[0].slug.current}`}>
+            <span>
+              <img src={allPostsData[0].mainImage.asset.url} alt="" />
+              <span>
+                <h4>{allPostsData[0].title}</h4>
               </span>
-            </Link>
-          ))}
+            </span>
+          </Link>
+        )}
       </div>
     </div>
   );
