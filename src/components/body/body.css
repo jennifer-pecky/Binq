@@ -1,0 +1,32 @@
+.slide {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 30px;
+}
+
+.slide1 h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: normal;
+    color: rgb(185, 146, 94);
+}
+
+.slide1 h1:hover {
+    color: #b6998d;
+}
+
+span {
+    color: rgb(185, 146, 94);
+}
+
+/****************************MEDIA QUERIES  (MEDIA DEVICES)***************/
+@media screen and (max-width: 600px) {
+    .slide {
+        flex-direction: column;
+    }
+
+    .slide1 h1 {
+        font-size: 2rem;
+        font-weight: 400;
+    }
+}

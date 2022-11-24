@@ -12,7 +12,7 @@ const Header = () => {
     <header>
       <div className="header">
         <div className="links">
-          <Link href={'/'} className="links">
+          <Link to={'/'} className="links">
             <a className="love">
               <ImBlogger color="222222" />
             </a>
@@ -32,7 +32,7 @@ const Header = () => {
         </div>
 
         <div className="headlines">
-          <Link href={'/'} className="links__tag">
+          <Link to={'/'} className="links__tag">
             <a>Blog</a>
             <a>Header</a>
             <a>Sports</a>
@@ -40,7 +40,7 @@ const Header = () => {
         </div>
 
         <div className="logo">
-          <Link href={'/'}>
+          <Link to={'/'}>
             <a>
               <b>Binq_Blog</b>
             </a>
@@ -48,7 +48,7 @@ const Header = () => {
         </div>
 
         <div className="headlines">
-          <Link href={'/'} className="links__tag">
+          <Link to={'/'} className="links__tag">
             <a>Shop</a>
             <a>Features</a>
             <a>Posts</a>
