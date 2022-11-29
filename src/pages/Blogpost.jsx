@@ -10,27 +10,31 @@ export default function Blogpost() {
   const { slug } = useParams();
 
   useEffect(() => {
+    FetchSlug();
+  }, [slug]);
+
+  const FetchSlug = () => {
     sanityClient
       .fetch(
         `*[slug.current == "${slug}"] {
-                title,
-                slug,
-                body,
-                mainImage{
-                    asset ->{
-                        _id,
-                        url
-                    },
-                    alt,
-                },
-                
-            }`
+              title,
+              slug,
+              body,
+              mainImage{
+                  asset ->{
+                      _id,
+                      url
+                  },
+                  alt,
+              },
+              
+          }`
       )
       .then((data) => {
         setBlogpost(data[0]);
       })
       .catch(console.error);
-  }, [slug]);
+  };
 
   // useEffect(() => {
   //   document.title = `Reading | ${blogpost.title}`;

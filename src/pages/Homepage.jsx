@@ -4,33 +4,66 @@ import { Link } from 'react-router-dom';
 import Body from '../components/body/Body';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
+import Modal from '../components/Modal/modal';
 import sanityClient from '../lib/client';
+import Blog from '../components/Blog/Blog';
 
 export default function Homepage() {
   const [stories, setStories] = useState([]);
 
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
-    sanityClient
-      .fetch(
-        `*[_type == "post"] {
-                title,
-                slug,
-                body,
-                mainImage{
-                    asset ->{
-                        _id,
-                        url
-                    },
-                    alt,
-                }
-            }`
-      )
-      .then((data) => {
-        setStories(data.slice(0, 3));
-        console.log(data);
-      })
-      .catch(console.error);
+    FetchBlog();
   }, []);
+
+  const FetchBlog = async () => {
+    try {
+      const response = await sanityClient.fetch(
+        `*[_type == "post"] {
+          title,
+          slug,
+          body,
+          mainImage{
+              asset ->{
+                  _id,
+                  url
+              },
+              alt,
+          }
+      }`
+      );
+
+      setStories(response.slice(0, 3));
+      setShowModal(false);
+    } catch (error) {
+      setShowModal(true);
+      console.error(error);
+    }
+
+    // sanityClient
+    //   .fetch(
+    //     `*[_type == "post"] {
+    //           title,
+    //           slug,
+    //           body,
+    //           mainImage{
+    //               asset ->{
+    //                   _id,
+    //                   url
+    //               },
+    //               alt,
+    //           }
+    //       }`
+    //   )
+    //   .then((data) => {
+    //     setStories(data.slice(0, 3));
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+  };
 
   return (
     <>
@@ -43,34 +76,24 @@ export default function Homepage() {
         <h2>loading....</h2>
       ) : (
         <>
-          {stories[0] && (
-            <Link to={`/blog/${stories[0].slug.current}`}>
-              <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto px-5 mb">
-                {stories.map((story) => (
-                  <article
-                    key={story.slug.current}
-                    className="border border-slate-400 rounded-lg overflow-hidden hover:bg-slate-200 transition-all duration-200"
-                  >
-                    {story.mainImage && (
-                      <img
-                        src={story.mainImage.asset.url}
-                        alt={story.mainImage.alt}
-                        loading="lazy"
-                        className="md:h-64 w-full object-cover"
-                      />
-                    )}
-                    <div className="p-4">
-                      <h1 className="text-xl mb-2">{story.title}</h1>
-
-                      <p className="text-sm leading-relaxed">
-                        {`${story.body[0].children[0].text.substr(0, 150)}...`}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </section>
-            </Link>
-          )}
+          <Modal
+            showModal={showModal}
+            fetchBlog={FetchBlog}
+            setShowModal={setShowModal}
+          />
+          {stories[0] &&
+            // <Link to={`/blog/${stories[0].slug.current}`}>
+            stories.map(
+              (story) => (
+                <Blog
+                  key={story.slug.currmainImageent}
+                  mainImage={story.mainImage}
+                  title={story.title}
+                  body={story.body}
+                />
+              )
+              // </Link>
+            )}
         </>
       )}
 
